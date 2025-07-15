@@ -46,7 +46,13 @@ void computeChallengeTime(string warriors[][3], string map[10][10]);
 void fighterDamage(Dragon dragons[], string warriors[][3], int teamsDamage[]);
 
 // Task 5.2
-// TBA
+int calculateTeamDamage(int teamsDamage[], int teamSize);
+void teamBattle(Dragon dragons[], string warriors[][3], int teamsDamage[]);
+
+// Utility functions
+void displayDragonStats(Dragon dragons[], int dragonDamages[], int N);
+float calculateCompatibility(int warriorSkill, Dragon& dragon);
+void validateInput(int N);
 
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
