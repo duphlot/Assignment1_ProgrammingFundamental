@@ -23,7 +23,7 @@ void sampleTest() {
     cout << "Number of dragons: " << N << endl;
     
     // Display detailed dragon statistics
-    displayDragonStats(dragons, dragonDamages, N);
+    // displayDragonStats(dragons, dragonDamages, N);
 }
 
 void testAllFunctions() {
@@ -31,9 +31,8 @@ void testAllFunctions() {
     
     // Test Task 2: Find strongest dragons
     cout << "\n--- Task 2: Strongest Dragons ---" << endl;
-    cout << "1st strongest: " << findKthStrongestDragon(dragons, dragonDamages, N, 1) << endl;
-    cout << "2nd strongest: " << findKthStrongestDragon(dragons, dragonDamages, N, 2) << endl;
-    cout << "3rd strongest: " << findKthStrongestDragon(dragons, dragonDamages, N, 3) << endl;
+    int testDamages[] = {100, 80, 90, 70, 95};
+    cout << "Task 2 answer: " << findKthStrongestDragon(dragons, testDamages, N, 6) << endl;
     
     // Test Task 3.1: Compatibility Check
     cout << "\n--- Task 3.1: Compatibility Check ---" << endl;

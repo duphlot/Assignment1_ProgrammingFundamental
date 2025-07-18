@@ -14,21 +14,97 @@ Dragon dragons[MAX_DRAGONS];
 int dragonDamages[5] = {0, 0, 0, 0, 0};
 int N = 0;
 
+int typeNameToType(const string typeName) {
+    if (typeName == "Night Fury") return 1;
+    if (typeName == "Deadly Nadder") return 2;
+    if (typeName == "Monstrous Nightmare") return 3;
+    if (typeName == "Gronckle") return 4;
+    if (typeName == "Hideous Zippleback") return 5;
+    if (typeName == "1") return 1;
+    if (typeName == "2") return 2;
+    if (typeName == "3") return 3;
+    if (typeName == "4") return 4;
+    if (typeName == "5") return 5;
+
+    return 0;
+}
+
+bool countSpecialCharacters(string name){
+    int count = 0;
+    for (char c : name) {
+        if (!isalnum(c) && c != ' ' && c != '-' && c != '_') {
+            count++;
+        }
+    }
+    return count;
+}
+
+int countBlankSpaces(string name) {
+    int count = 0;
+    // Count over spaces
+    for (int i=1;i<name.length();i++) {
+        if (name[i] == ' ' && name[i-1] == ' ') {
+            count++;
+        }
+    }
+    return count;
+}
+
+// Helper function to parse quoted strings
+int parseQuotedStrings(const string& line, string results[], int maxCount) {
+    int count = 0;
+    size_t start = line.find('"');
+    while (start != string::npos && count < maxCount) {
+        size_t end = line.find('"', start + 1);
+        if (end != string::npos) {
+            results[count] = line.substr(start + 1, end - start - 1);
+            count++;
+            start = line.find('"', end + 1);
+        } else {
+            break;
+        }
+    }
+    return count;
+}
+
+// Helper function to parse array values
+int parseArrayValues(const string& line, int results[], int maxCount) {
+    int count = 0;
+    size_t start = line.find('[');
+    size_t end = line.find(']');
+    if (start != string::npos && end != string::npos) {
+        string values = line.substr(start + 1, end - start - 1);
+        stringstream valStream(values);
+        string token;
+        while (getline(valStream, token, ';') && count < maxCount) {
+            results[count] = stoi(token);
+            count++;
+        }
+    }
+    return count;
+}
+
 // Task 1
 int readFile(const string filename, Dragon dragons[], int dragonDamages[5], int &N)
 {
+    // Check file extension first
+    if (filename.substr(filename.find_last_of(".") + 1) != "txt") {
+        return 2; // File doesn't have .txt extension
+    }
+
     ifstream ifs(filename);
-    if (!ifs.is_open())
-    {
+    if (!ifs.is_open()){
         return 3; // File not found
     }
 
     string line;
     
     // Read dragon names line: ["Toothless", "Stormfly", ...]
-    if (!getline(ifs, line)) return 2;
-    stringstream ss1(line);
-    string name;
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4;
+    }
+    
     int dragonCount = 0;
     size_t start = line.find('"');
     while (start != string::npos && dragonCount < MAX_DRAGONS) {
@@ -41,111 +117,207 @@ int readFile(const string filename, Dragon dragons[], int dragonDamages[5], int 
             break;
         }
     }
-    
-    // Skip dragon type names line
-    if (!getline(ifs, line)) return 2;
-    
+
+    // Read dragon types line: ["Night Fury", "Deadly Nadder", ...]
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4;
+    }
+
+    string typeNames[MAX_DRAGONS];
+    int typeCount = 0;
+    start = line.find('"');
+    while (start != string::npos && typeCount < MAX_DRAGONS) {
+        size_t end = line.find('"', start + 1);
+        if (end != string::npos) {
+            string typeName = line.substr(start + 1, end - start - 1);
+            typeNames[typeCount] = typeName;
+            typeCount++;
+            start = line.find('"', end + 1);
+        } else {
+            break;
+        }
+    }
+
     // Read temperament values: [9; 8; 7; 7; 6]
-    if (!getline(ifs, line)) return 2;
-    stringstream ss3(line);
-    string token;
-    int index = 0;
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4; 
+    }
+    
+    int tempCount = 0;
     start = line.find('[');
     size_t end = line.find(']');
     if (start != string::npos && end != string::npos) {
         string values = line.substr(start + 1, end - start - 1);
         stringstream valStream(values);
-        while (getline(valStream, token, ';') && index < dragonCount) {
-            dragons[index].dragonTemperament = stoi(token);
-            index++;
+        string token;
+        while (getline(valStream, token, ';') && tempCount < MAX_DRAGONS) {
+            if (tempCount < dragonCount) {
+                dragons[tempCount].dragonTemperament = stoi(token);
+            }
+            tempCount++;
         }
     }
     
-    // Read dragon types: [3; 2; 5; 1; 4]
-    if (!getline(ifs, line)) return 2;
-    index = 0;
+    // Read ammo counts: [3; 2; 5; 1; 4]
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4; 
+    }
+    
+    int ammoCount = 0;
     start = line.find('[');
     end = line.find(']');
     if (start != string::npos && end != string::npos) {
         string values = line.substr(start + 1, end - start - 1);
         stringstream valStream(values);
-        while (getline(valStream, token, ';') && index < dragonCount) {
-            dragons[index].dragonTypes = stoi(token);
-            index++;
+        string token;
+        while (getline(valStream, token, ';') && ammoCount < MAX_DRAGONS) {
+            if (ammoCount < dragonCount) {
+                dragons[ammoCount].ammoCounts = stoi(token);
+            }
+            ammoCount++;
         }
     }
+
+    // Read dragon damages: [100; 80; 90; 70; 95] 
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4;
+    }
     
-    // Read ammo counts: [100; 80; 90; 70; 95]
-    if (!getline(ifs, line)) return 2;
-    index = 0;
+    int damageCount = 0;
     start = line.find('[');
     end = line.find(']');
     if (start != string::npos && end != string::npos) {
         string values = line.substr(start + 1, end - start - 1);
         stringstream valStream(values);
-        while (getline(valStream, token, ';') && index < dragonCount) {
-            dragons[index].ammoCounts = stoi(token);
-            index++;
+        string token;
+        while (getline(valStream, token, ';') && damageCount < 5) {
+            dragonDamages[damageCount] = stoi(token);
+            damageCount++;
         }
     }
+    
+
     
     // Read rider names: ["Hiccup", "Astrid", ...]
-    if (!getline(ifs, line)) return 2;
-    index = 0;
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4;
+    }
+    
+    int riderCount = 0;
     start = line.find('"');
-    while (start != string::npos && index < dragonCount) {
+    while (start != string::npos && riderCount < MAX_DRAGONS) {
         size_t nameEnd = line.find('"', start + 1);
         if (nameEnd != string::npos) {
-            dragons[index].riderNames = line.substr(start + 1, nameEnd - start - 1);
-            index++;
+            if (riderCount < dragonCount) {
+                dragons[riderCount].riderNames = line.substr(start + 1, nameEnd - start - 1);
+            }
+            riderCount++;
             start = line.find('"', nameEnd + 1);
         } else {
             break;
         }
     }
-    
-    // Read number of dragons
-    if (!getline(ifs, line)) return 2;
+
+    if (!getline(ifs, line)) {
+        ifs.close();
+        return 4; 
+    }
     N = stoi(line);
     
-    // Validate input
-    validateInput(N);
-    
-    // Calculate dragon damages based on temperament and ammo
-    for (int i = 0; i < N; i++) {
-        dragonDamages[i] = dragons[i].dragonTemperament * dragons[i].ammoCounts / 10;
+    if (N != dragonCount) {
+        ifs.close();
+        return 5; 
     }
-    
+
+    if (typeCount != N) {
+        ifs.close();
+        return 6; 
+    }
+    if (tempCount != N) {
+        ifs.close();
+        return 7;
+    }
+    if (ammoCount != N) {
+        ifs.close();
+        return 8;
+    }
+
+    // Check if dragonDamages array has exactly 5 elements
+    if (damageCount != 5) {
+        ifs.close();
+        return 9;
+    }
+
+    if (riderCount != N) {
+        ifs.close();
+        return 10; 
+    }
+
+    // check invalid dragon names
+    for (int i = 0; i < N; i++) {
+        if (countSpecialCharacters(dragons[i].dragonNames)!=0) {
+            return (100 + i); 
+        }
+    }
+    for (int i=0; i < N; i++){
+        int count = countSpecialCharacters(typeNames[i]);
+        if (count != 0) {
+            return (500 + count);
+        }
+    }
+    for (int i = 0; i < N;i++){
+        dragons[i].dragonTypes = typeNameToType(typeNames[i]);
+    } 
+
+    for (int i = 0; i < N; i++) {
+        if (countBlankSpaces(dragons[i].riderNames) > 0) {
+            return (900 + i);
+        }
+    }
+    int countBlankInNames = 0;
+    for (int i = 0; i < N; i++) {
+        countBlankInNames += countBlankSpaces(dragons[i].dragonNames);
+        if (countBlankInNames > 1) {
+            return (1000 + countBlankInNames);
+        }
+    }
+
+    for (int i = 0; i < dragonCount; i++) {
+    cout << "Dragon " << i + 1 << ": " << dragons[i].dragonNames 
+         << ", Type: " << dragons[i].dragonTypes 
+         << ", Temperament: " << dragons[i].dragonTemperament 
+         << ", Ammo: " << dragons[i].ammoCounts 
+         << ", Rider: " << dragons[i].riderNames 
+         << ", Damage: " << dragonDamages[i] << endl;
+    }
+
     ifs.close();
     return 1; // Success
 }
 
 // Task 2
-string findKthStrongestDragon(Dragon dragons[], int dragonDamages[5], int N, int T)
-{
-    if (T < 1 || T > N) {
-        return "None";
-    }
-    
-    // Create array of indices to sort by damage
-    int indices[MAX_DRAGONS];
-    for (int i = 0; i < N; i++) {
-        indices[i] = i;
-    }
-    
-    // Sort indices by damage in descending order (bubble sort)
-    for (int i = 0; i < N - 1; i++) {
-        for (int j = 0; j < N - 1 - i; j++) {
-            if (dragonDamages[indices[j]] < dragonDamages[indices[j + 1]]) {
-                int temp = indices[j];
-                indices[j] = indices[j + 1];
-                indices[j + 1] = temp;
+string findKthStrongestDragon(Dragon dragons[], int dragonDamages[5], int N, int T){
+    int maxPower = 0, answer = 0;
+
+    double coefficient1[] = {1,1,1,1,0.9};
+    double coefficient2[] = {3,2,1,0.5,1.5};
+
+    for (int i = 0; i < N; i++){
+        int types = dragons[i].dragonTypes;
+        if (dragons[i].dragonTemperament >= T){
+            int temp = (dragons[i].ammoCounts * dragonDamages[types - 1] * coefficient1[types - 1]) + dragons[i].dragonTemperament * coefficient2[types - 1];
+            if (temp > maxPower) {
+                maxPower = temp;
+                answer = i; 
             }
         }
     }
-    
-    // Return the T-th strongest dragon (T is 1-indexed)
-    return dragons[indices[T - 1]].dragonNames;
+    return (answer == 0) ? "None" : dragons[answer].dragonNames;
 }
 
 // Task 3.1
@@ -349,13 +521,6 @@ void displayDragonStats(Dragon dragons[], int dragonDamages[], int N)
 float calculateCompatibility(int warriorSkill, Dragon& dragon)
 {
     return sqrt((float)(warriorSkill * dragon.dragonTemperament) + dragon.dragonTypes);
-}
-
-void validateInput(int N)
-{
-    if (N <= 0 || N > MAX_DRAGONS) {
-        cout << "Warning: Invalid number of dragons (" << N << ")" << endl;
-    }
 }
 
 ////////////////////////////////////////////////
