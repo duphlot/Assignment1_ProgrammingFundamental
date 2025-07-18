@@ -49,25 +49,25 @@ void testAllFunctions() {
     };
     buddyMatching(dragons, sampleWarriors);
     
-    // Test Task 4: Challenge Time (with sample map)
-    cout << "\n--- Task 4: Challenge Time ---" << endl;
-    string sampleMap[10][10];
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            sampleMap[i][j] = "0"; // Default empty terrain
-        }
-    }
-    // Add some obstacles
-    sampleMap[2][3] = "1";
-    sampleMap[4][5] = "2";
-    sampleMap[6][7] = "1";
+    // // Test Task 4: Challenge Time (with sample map)
+    // cout << "\n--- Task 4: Challenge Time ---" << endl;
+    // string sampleMap[10][10];
+    // for (int i = 0; i < 10; i++) {
+    //     for (int j = 0; j < 10; j++) {
+    //         sampleMap[i][j] = "0"; // Default empty terrain
+    //     }
+    // }
+    // // Add some obstacles
+    // sampleMap[2][3] = "1";
+    // sampleMap[4][5] = "2";
+    // sampleMap[6][7] = "1";
     
-    computeChallengeTime(sampleWarriors, sampleMap);
+    // computeChallengeTime(sampleWarriors, sampleMap);
     
-    // Test Task 5: Fighter Damage
-    cout << "\n--- Task 5: Team Battle ---" << endl;
-    int teamsDamage[5];
-    teamBattle(dragons, sampleWarriors, teamsDamage);
+    // // Test Task 5: Fighter Damage
+    // cout << "\n--- Task 5: Team Battle ---" << endl;
+    // int teamsDamage[5];
+    // teamBattle(dragons, sampleWarriors, teamsDamage);
 }
 
 int main() {

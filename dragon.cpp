@@ -349,7 +349,7 @@ void printCompatibilityTable(string fighterName, string dragonName, float compat
 void buddyMatching(Dragon dragons[], string warriors[][3])
 {
     bool dragonUsed[MAX_DRAGONS] = {false};
-    
+
     for (int i = 0; i < N; i++) {
         string warriorName = warriors[i][0];
         int warriorSkill = stoi(warriors[i][1]);
@@ -520,7 +520,7 @@ void displayDragonStats(Dragon dragons[], int dragonDamages[], int N)
 
 float calculateCompatibility(int warriorSkill, Dragon& dragon)
 {
-    return sqrt((float)(warriorSkill * dragon.dragonTemperament) + dragon.dragonTypes);
+    return (float)(10 - abs(dragon.dragonTemperament - warriorSkill)) / 2.0f;
 }
 
 ////////////////////////////////////////////////

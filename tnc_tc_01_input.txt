@@ -1,7 +1,7 @@
- ["Toothless", "Stormfly", "Hookfang"]
- [1; 2; 4]
- [3; 2; 4]
- [1; 2; 3]
- [100; 80; 70; 60; 50]
- ["Hiccup", "Astrid", "Snotlout"]
- 3
+["Toothless", "Stormfly", "Hookfang", "Meatlug", "Barf and Belch"]
+["1", "2", "3", "4", "5"]
+[9; 8; 7; 7; 6]
+[3; 2; 5; 1; 4]
+[100; 80; 90; 70; 95]
+["Hiccup", "Astrid", "Snotlout", "Fishlegs", "Ruff and Tuff"]
+5
