@@ -463,39 +463,22 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     int dir = 1; 
     while (startX != keyX || startY != keyY) {
         dir = (startX % 2 == 0) ? 1 : -1;
-        if (dir == 1) { 
-            if (startY < 9) startY++;
-            else startX++;
-        } else { 
-            if (startY > 0) startY--;
-            else startX++;
-        }
+        if ((dir == 1 && startY < 9) || (dir == -1 && startY > 0)) startY += dir;
+        else startX++;
         path[++temp][0] = startX;
         path[temp][1] = startY;
-        cout<<"Current position: ("<<startX<<","<<startY<<")\n";
-        cout<<"Current total time: "<<totalTime<<"\n";
+        cout << "Current position: (" << startX << "," << startY << ")\n";
+        cout << "Current total time: " << totalTime << "\n";
         totalTime += computeCost(startX, startY, map, warriorDamage, HP);
-        if (startX == keyX && startY == keyY) break;
     }
 
     if (heritageX < keyX) {
         totalTime += ((keyY + heritageX) + (keyX - heritageX) * 9) * 2;
         int curX = keyX, curY = keyY;
-        int dir2 = (keyX % 2 == 0) ? 1 : -1;
         while (curX != heritageX || curY != heritageY) {
-            if (dir2 == 1) {
-                if (curY < 9) curY++;
-                else {
-                    curX--;
-                    dir2 = -1;
-                }
-            } else {
-                if (curY > 0) curY--;
-                else {
-                    curX--;
-                    dir2 = 1;
-                }
-            }
+            dir = (startX % 2 == 0) ? 1 : -1;
+            if ((dir == 1 && startY < 9) || (dir == -1 && startY > 0)) startY += dir;
+            else startX++;
             path[++temp][0] = curX;
             path[temp][1] = curY;
             if (curX == heritageX && curY == heritageY) break;
@@ -505,21 +488,10 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     else if (heritageX == keyX && heritageY < keyY) {
         totalTime += (keyY - heritageY) * 2;
         int curX = keyX, curY = keyY;
-        int dir2 = (keyX % 2 == 0) ? 1 : -1; 
         while (curX != heritageX || curY != heritageY) {
-            if (dir2 == 1) {
-                if (curY < 9) curY++;
-                else {
-                    curX--;
-                    dir2 = -1;
-                }
-            } else {
-                if (curY > 0) curY--;
-                else {
-                    curX--;
-                    dir2 = 1;
-                }
-            }
+            dir = (startX % 2 == 0) ? 1 : -1;
+            if ((dir == 1 && startY < 9) || (dir == -1 && startY > 0)) startY += dir;
+            else startX++;
             path[++temp][0] = curX;
             path[temp][1] = curY;
             if (curX == heritageX && curY == heritageY) break;
@@ -527,13 +499,8 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     } else {
         while (startX != heritageX || startY != heritageY) {
             dir = (startX % 2 == 0) ? 1 : -1;
-            if (dir == 1) { 
-                if (startY < 9) startY++;
-                else startX++;
-            } else { 
-                if (startY > 0) startY--;
-                else startX++;
-            }
+            if ((dir == 1 && startY < 9) || (dir == -1 && startY > 0)) startY += dir;
+            else startX++;
             path[++temp][0] = startX;
             path[temp][1] = startY;
             totalTime += computeCost(startX, startY, map, warriorDamage, HP);
