@@ -68,8 +68,25 @@ void testAllFunctions() {
     // cout << "\n--- Task 5: Team Battle ---" << endl;
     // int teamsDamage[5];
     // teamBattle(dragons, sampleWarriors, teamsDamage);
+    
+    // Test totalTime function
+    cout << "\n--- Testing totalTime Function ---" << endl;
+    int testMap[10][10] = {
+        { 10,  20,  30,  40,  50,  60,  70,  80,  90, 100 },
+        { 15,  25,  35,  45,  55,  65,  75,  85,  95, 105 },
+        { 12,  22,  32,  42,  52,  62,  72,  82,  92, 175 },
+        {118, 128, 138,  50,  58,  68,  78,  88,  98, 108 },
+        { 14,  24,  34,  44,  54,  64,  74,  84,  94, 104 },
+        { 19,  29,  39,  49,  59,  69,  79,  89,  99, 109 },
+        { 11,  21,  31,  41,  51,  61,  71,  81,  91, 101 },
+        { 16,  26,  36,  46,  56,  66,  76, 186,  96, 106 },
+        { 17,  27,  37,  47,  57,  67, 196,  87,  90, 107 },
+        { 13,  23,  33,  43,  53,  63,  73, 153,  93, 170 }
+    };
+    
+    // Test với chiến binh có sát thương = 150 và HP = 20 như ví dụ
+    totalTime(testMap, 150, 20);
 }
-
 int main() {
     sampleTest();
     testAllFunctions();

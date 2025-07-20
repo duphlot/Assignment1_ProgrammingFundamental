@@ -1,5 +1,5 @@
 ["Toothless", "Stormfly", "Hookfang", "Meatlug", "Barf and Belch"]
-["1", "2", "3", "4", "5"]
+["Night Fury", "Deadly Nadder", "Monstrous Nightmare", "Gronckle", "Hideous Zippleback"]
 [9; 8; 7; 7; 6]
 [3; 2; 5; 1; 4]
 [100; 80; 90; 70; 95]
