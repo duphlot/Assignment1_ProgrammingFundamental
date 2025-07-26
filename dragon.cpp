@@ -208,10 +208,10 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         if (countSpecialCharacters(dragons[i].dragonNames)!=0) return (100 + i); 
     
     // check invalid type names
+    int count = 0;
     for (int i=0; i < N; i++){
-        int count = countSpecialCharacters(typeNames[i]);
-        if (count != 0) return (500 + count);
-    }
+        count += countSpecialCharacters(typeNames[i]);
+    } if (count != 0) return (500 + count);
 
     // if valid type names, convert them to types
     for (int i = 0; i < N;i++){
@@ -227,18 +227,17 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
     int countBlankInNames = 0;
     for (int i = 0; i < N; i++) {
         countBlankInNames += countBlankSpaces(dragons[i].dragonNames);
-        if (countBlankInNames > 1) return (1000 + countBlankInNames);
-    }
+    }if (countBlankInNames > 1) return (1000 + countBlankInNames);
 
     // debug output
-    for (int i = 0; i < dragonCount; i++) {
-    cout << "Dragon " << i + 1 << ": " << dragons[i].dragonNames 
-        << ", Type: " << dragons[i].dragonTypes 
-        << ", Temperament: " << dragons[i].dragonTemperament 
-        << ", Ammo: " << dragons[i].ammoCounts 
-        << ", Rider: " << dragons[i].riderNames 
-        << ", Damage: " << dragonDamages[i] << "\n";
-    }
+    // for (int i = 0; i < dragonCount; i++) {
+    // cout << "Dragon " << i + 1 << ": " << dragons[i].dragonNames 
+    //     << ", Type: " << dragons[i].dragonTypes 
+    //     << ", Temperament: " << dragons[i].dragonTemperament 
+    //     << ", Ammo: " << dragons[i].ammoCounts 
+    //     << ", Rider: " << dragons[i].riderNames 
+    //     << ", Damage: " << dragonDamages[i] << "\n";
+    // }
 
     return 1; // Success
 }
@@ -276,11 +275,7 @@ void compatibilityCheck(Dragon dragons[], string warriorName, int warriorSkill){
 }
 
 void printCompatibilityTable(string fighterName, string dragonName, float compatibility){
-    static bool headerPrinted = false;
-    if (!headerPrinted) {
-        cout << "Warrior      Dragon        Compatibility    Review" << "\n";
-        headerPrinted = true;
-    }
+    cout << "Warrior      Dragon        Compatibility    Review" << "\n";
 
     string result = (compatibility > 4) ? "Compatible" : "Not Compatible";
 
@@ -445,8 +440,8 @@ int computeCost(int &x, int &y, int (*map)[10], int warriorDamage, int &HP){
 
 void totalTime(int map[10][10], int warriorDamage, int HP) {
     int heritageX, heritageY, keyX, keyY;
-    findHeritageLocation(map, heritageX, heritageY);
-    findKeyLocation(map, keyX, keyY);
+    // findHeritageLocation(map, heritageX, heritageY);
+    // findKeyLocation(map, keyX, keyY);
 
     cout<< "Heritage Location: (" << heritageX << ", " << heritageY << ")\n";
     cout<< "Key Location: (" << keyX << ", " << keyY << ")\n";
