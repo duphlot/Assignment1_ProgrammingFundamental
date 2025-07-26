@@ -9,9 +9,11 @@
 // The library here is concretely set, students are not allowed to include any other libraries.
 
 #include "dragon.h"
+#include <iostream>
 
-void sampleTest() {
-    const string inputFile = "tnc_tc_01_input.txt";
+void sampleTest(string filename = "input/tnc_tc_12_input.txt", string outputFile = "output/tnc_tc_12_output.txt") {
+    freopen(outputFile.c_str(), "w", stdout);
+    const string inputFile = filename;
 
     int result = readFile(inputFile, dragons, dragonDamages, N);
     if (result != 1) {
@@ -88,7 +90,11 @@ void testAllFunctions() {
     totalTime(testMap, 150, 20);
 }
 int main() {
-    sampleTest();
-    testAllFunctions();
+    for (int i = 1; i <= 12; i++) {
+        string scope = (i < 10 ? "0" : "") + to_string(i);
+        string inputFile = "input/tnc_tc_" + scope + "_input.txt";
+        sampleTest(inputFile, "output/tnc_tc_" + scope + "_output.txt");
+        testAllFunctions();
+    }
     return 0;
 }

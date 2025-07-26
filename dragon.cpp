@@ -418,7 +418,7 @@ int computeCost(int &x, int &y, int (*map)[10], int warriorDamage, int &HP){
         if (warriorDamage < map[x][y]){
             HP-=2;
             map[x][y] = 0;
-            cout<< "Time Illusion Dragon at (" << x << ", " << y << ")\n";
+            // cout<< "Time Illusion Dragon at (" << x << ", " << y << ")\n";
             if (x!=0) x--;
             else y = 0;
         } else map[x][y] = 0;
@@ -428,7 +428,7 @@ int computeCost(int &x, int &y, int (*map)[10], int warriorDamage, int &HP){
     if (checkChaosReversingDragon(x, y, map)) {
         if (warriorDamage < map[x][y]){
             HP-=2;
-            cout<< "Chaos Reversing Dragon at (" << x << ", " << y << ")\n";
+            // cout<< "Chaos Reversing Dragon at (" << x << ", " << y << ")\n";
             map[x][y] = 0;
             swap(x,y);
         } else map[x][y] = 0;
@@ -436,7 +436,7 @@ int computeCost(int &x, int &y, int (*map)[10], int warriorDamage, int &HP){
     }
 
     if (warriorDamage < map[x][y]){
-        cout<< "Tiny Dragon at (" << x << ", " << y << ")\n";
+        // cout<< "Tiny Dragon at (" << x << ", " << y << ")\n";
         HP--;
     } 
     map[x][y] = 0;
@@ -452,8 +452,8 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     cout<< "Key Location: (" << keyX << ", " << keyY << ")\n";
     
     int startX = 0, startY = 0, totalTime = 0;
-    cout<<"Current position: ("<<startX<<","<<startY<<")\n";
-    cout<<"Current total time: "<<totalTime<<"\n";
+    // cout<<"Current position: ("<<startX<<","<<startY<<")\n";
+    // cout<<"Current total time: "<<totalTime<<"\n";
     totalTime = computeCost(startX, startY, map, warriorDamage, HP);
 
     int path[200][2];
@@ -472,8 +472,8 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
         }
         path[++temp][0] = startX;
         path[temp][1] = startY;
-        cout<<"Current position: ("<<startX<<","<<startY<<")\n";
-        cout<<"Current total time: "<<totalTime<<"\n";
+        // cout<<"Current position: ("<<startX<<","<<startY<<")\n";
+        // cout<<"Current total time: "<<totalTime<<"\n";
         totalTime += computeCost(startX, startY, map, warriorDamage, HP);
         if (startX == keyX && startY == keyY) break;
     }
