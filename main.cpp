@@ -12,7 +12,7 @@
 #include <iostream>
 
 void sampleTest(string filename = "tnc_tc_01_input.txt", string outputFile = "tnc_tc_01_output.txt") {
-    freopen(outputFile.c_str(), "w", stdout); 
+    // freopen(outputFile.c_str(), "w", stdout); 
     const string inputFile = filename;
 
     int result = readFile(inputFile, dragons, dragonDamages, N);
@@ -86,11 +86,7 @@ void testAllFunctions() {
     totalTime(testMap, 150, 20);
 }
 int main() {
-    for (int i = 1; i <= 12; i++) {
-        string scope = (i < 10 ? "0" : "") + to_string(i);
-        string inputFile = "input/tnc_tc_" + scope + "_input.txt";
-        sampleTest(inputFile, "output/tnc_tc_" + scope + "_output.txt");
-        testAllFunctions();
-    }
+    sampleTest();
+    testAllFunctions();
     return 0;
 }
