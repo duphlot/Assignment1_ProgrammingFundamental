@@ -10,6 +10,8 @@
 /// DO NOT modify any parameters in the functions.
 ////////////////////////////////////////////////////////////////////////
 
+// hong duyen
+
 Dragon dragons[MAX_DRAGONS];
 int dragonDamages[5] = {0, 0, 0, 0, 0};
 int N = 0;
@@ -31,40 +33,29 @@ int typeNameToType(const string typeName) {
 
 bool countSpecialCharacters(string name){
     int count = 0;
-    for (char c : name) {
-        if (!isalnum(c) && c != ' ' && c != '-' && c != '_') {
-            count++;
-        }
-    }
+    for (char c : name)
+        if (!isalnum(c) && c != ' ' && c != '-' && c != '_') count++;
     return count;
 }
 
 int countBlankSpaces(string name) {
     int count = 0;
-    // Count over spaces
-    for (int i=1;i<name.length();i++) {
-        if (name[i] == ' ' && name[i-1] == ' ') {
-            count++;
-        }
-    }
+    for (int i=1;i<name.length();i++)
+        if (name[i] == ' ' && name[i-1] == ' ') count++;
     return count;
 }
 
 // Task 1
 int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], int &N)
 {
-    if (filename.substr(filename.find_last_of(".") + 1) != "txt") {
-        return 2; // File doesn't have .txt extension
-    }
+    if (filename.substr(filename.find_last_of(".") + 1) != "txt") return 2; 
+
 
     ifstream ifs(filename);
-    if (!ifs.is_open()){
-        return 3; // File not found
-    }
+    if (!ifs.is_open()) return 3;
 
     string line;
     
-    // First line: Read dragon names line: ["Toothless", "Stormfly", ...]
     if (!getline(ifs, line)) {
         ifs.close();
         return 4;
@@ -83,7 +74,6 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
 
-    // Second line: read dragon types line: ["Night Fury", "Deadly Nadder", ...]
     if (!getline(ifs, line)) {
         ifs.close();
         return 4;
@@ -104,7 +94,6 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
 
-    // Third line: read temperament values: [9; 8; 7; 7; 6]
     if (!getline(ifs, line)) {
         ifs.close();
         return 4; 
@@ -125,7 +114,6 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
     
-    // Fourth line: read ammo counts: [3; 2; 5; 1; 4]
     if (!getline(ifs, line)) {
         ifs.close();
         return 4; 
@@ -145,8 +133,6 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
             ammoCount++;
         }
     }
-
-    // Fiveth line: read dragon damages: [100; 80; 90; 70; 95] 
     if (!getline(ifs, line)) {
         ifs.close();
         return 4;
@@ -165,9 +151,6 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
     
-
-    
-    // Sixth line: read rider names: ["Hiccup", "Astrid", ...]
     if (!getline(ifs, line)) {
         ifs.close();
         return 4;
@@ -190,56 +173,40 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
 
     if (!getline(ifs, line)) {
         ifs.close();
-        return 4; // No line for N
+        return 4; 
     }
 
     N = stoi(line);
     ifs.close();
 
-    if (dragonCount != N) return 5; // dragon count mismatch
-    if (typeCount != N) return 6; // dragon type count mismatch
-    if (tempCount != N) return 7; // dragon temperament count mismatch
-    if (ammoCount != N) return 8; // dragon ammo count mismatch
-    if (damageCount != 5) return 9; // dragon damage count mismatch
-    if (riderCount != N) return 10; // dragon rider count mismatch
-    
-    // check invalid dragon names
+    if (dragonCount != N) return 5;
+    if (typeCount != N) return 6; 
+    if (tempCount != N) return 7; 
+    if (ammoCount != N) return 8; 
+    if (damageCount != 5) return 9; 
+    if (riderCount != N) return 10; 
+
     for (int i = 0; i < N; i++) 
         if (countSpecialCharacters(dragons[i].dragonNames)!=0) return (100 + i); 
     
-    // check invalid type names
     int count = 0;
     for (int i=0; i < N; i++){
         count += countSpecialCharacters(typeNames[i]);
     } if (count != 0) return (500 + count);
 
-    // if valid type names, convert them to types
     for (int i = 0; i < N;i++){
         dragons[i].dragonTypes = typeNameToType(typeNames[i]);
     } 
 
-    // check invalid rider names
     for (int i = 0; i < N; i++) {
         if (countBlankSpaces(dragons[i].riderNames) > 0) return (900 + i);
     }
 
-    // check blank spaces in dragon names
     int countBlankInNames = 0;
     for (int i = 0; i < N; i++) {
         countBlankInNames += countBlankSpaces(dragons[i].dragonNames);
     }if (countBlankInNames > 1) return (1000 + countBlankInNames);
-
-    // debug output
-    // for (int i = 0; i < dragonCount; i++) {
-    // cout << "Dragon " << i + 1 << ": " << dragons[i].dragonNames 
-    //     << ", Type: " << dragons[i].dragonTypes 
-    //     << ", Temperament: " << dragons[i].dragonTemperament 
-    //     << ", Ammo: " << dragons[i].ammoCounts 
-    //     << ", Rider: " << dragons[i].riderNames 
-    //     << ", Damage: " << dragonDamages[i] << "\n";
-    // }
-
-    return 1; // Success
+    return 1; 
 }
 
 // Task 2
@@ -275,8 +242,11 @@ void compatibilityCheck(Dragon dragons[], string warriorName, int warriorSkill){
 }
 
 void printCompatibilityTable(string fighterName, string dragonName, float compatibility){
-    cout << "Warrior      Dragon        Compatibility    Review" << "\n";
-
+     static bool headerPrinted = false;
+    if (!headerPrinted) {
+        cout << "Warrior      Dragon        Compatibility    Review" << "\n";
+        headerPrinted = true;
+    }
     string result = (compatibility > 4) ? "Compatible" : "Not Compatible";
 
     cout << left << setw(13) << fighterName << setw(14) << dragonName
@@ -288,18 +258,17 @@ void printCompatibilityTable(string fighterName, string dragonName, float compat
 void buddyMatching(Dragon dragons[], string warriors[][3]){
     bool dragonUsed[MAX_DRAGONS];
 
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < 4; i++) {
         string warriorName = warriors[i][0];
         int warriorSkill = stoi(warriors[i][1]);
         
         int bestDragonIndex = -1;
         float bestCompatibility = 0;
         
-        // Find the best available dragon for this warrior
-        for (int j = 0; j < N; j++) {
+        for (int j = 0; j < 4; j++) {
             if (!dragonUsed[j]) {
                 float compatibility = calculateCompatibility(warriorSkill, dragons[j]);
-                if (compatibility > bestCompatibility) {
+                if (compatibility > bestCompatibility && compatibility > 4) {
                     bestCompatibility = compatibility;
                     bestDragonIndex = j;
                 }
@@ -314,9 +283,57 @@ void buddyMatching(Dragon dragons[], string warriors[][3]){
 }
 
 // Task 4
-void computeChallengeTime(string warriors[][3], string map[10][10])
-{
-    // TODO: Implement this function
+int getAreaID(int rows,int cols){
+    return (rows + cols) % 5;
+}
+
+int timeFromStartToArea(int x,int y){
+    return (1 + (x + y * 2)) * 5;
+}
+
+int timeFromAreaToStart(int x,int y){
+    return abs((x + y * 2) -1) * 5;
+}
+
+int computeTime(int map[10][10], int warriorID){
+    int time = 0;
+    int temp = 0;
+    int dir = 1; 
+    int finalAnswer = 0, tempAnswer = 0;
+
+    int currentX = 0, currentY = 0;
+    bool checkStart = false;
+
+    while (currentX != 9 || currentY != 9) {
+        if (checkStart) tempAnswer = timeFromStartToArea(currentX,currentY);
+
+        dir = (currentX % 2 == 0) ? 1 : -1;
+        if (dir == 1) { 
+            if (currentY < 9) currentY++;
+            else currentX++;
+        } else { 
+            if (currentY > 0) currentY--;
+            else currentX++;
+        }
+
+        if (map[currentX][currentY] == warriorID && warriorID != getAreaID(currentX, currentY)) {
+            tempAnswer = timeFromStartToArea(currentX, currentY) + timeFromAreaToStart(currentX, currentY);
+            checkStart = true;
+        } else tempAnswer += 5;
+    }
+
+    return tempAnswer;
+}
+
+void computeChallengeTime(string warriors[][3], int map[10][10]){
+    cout << left << setw(15) << "Warrior" << "Total time (secs)" << endl;
+    for (int i=0;i<4;i++){
+        string warriorName = warriors[i][0];
+        int warriorID = stoi(warriors[i][2]);
+        int time = computeTime(map, warriorID);
+
+        cout << left << setw(15) << warriorName << time << endl;
+    }
 }
 
 // Task 5.1
@@ -326,7 +343,7 @@ int findriderSkill(string name,string warriors[][3]){
             return stoi(warriors[i][1]);
         }
     }
-    return -1; // Not found
+    return -1; 
 }
 
 void fighterDamage(Dragon dragons[], string warriors[][3], int (&teamsDamage)[]){
@@ -355,6 +372,7 @@ void findHeritageLocation(int  map[10][10], int &heritageX, int &heritageY) {
         }
     }
 }
+
 void findKeyLocation(int map[10][10], int &keyX, int &keyY) {
     int prefixSum[11][11] = {0};
 
@@ -440,16 +458,15 @@ int computeCost(int &x, int &y, int (*map)[10], int warriorDamage, int &HP){
 
 void totalTime(int map[10][10], int warriorDamage, int HP) {
     int heritageX, heritageY, keyX, keyY;
-    // findHeritageLocation(map, heritageX, heritageY);
-    // findKeyLocation(map, keyX, keyY);
+    findHeritageLocation(map, heritageX, heritageY);
+    findKeyLocation(map, keyX, keyY);
 
-    cout<< "Heritage Location: (" << heritageX << ", " << heritageY << ")\n";
-    cout<< "Key Location: (" << keyX << ", " << keyY << ")\n";
+    // cout<< "Heritage Location: (" << heritageX << ", " << heritageY << ")\n";
+    // cout<< "Key Location: (" << keyX << ", " << keyY << ")\n";
     
     int startX = 0, startY = 0, totalTime = 0;
     // cout<<"Current position: ("<<startX<<","<<startY<<")\n";
     // cout<<"Current total time: "<<totalTime<<"\n";
-    totalTime = computeCost(startX, startY, map, warriorDamage, HP);
 
     int path[200][2];
     path[0][0] = startX;

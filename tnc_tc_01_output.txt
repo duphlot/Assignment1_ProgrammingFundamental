@@ -1,0 +1,22 @@
+Error code: 9
+
+=== TESTING ALL FUNCTIONS ===
+
+--- Task 2: Strongest Dragons ---
+Task 2 answer: Hookfang
+
+--- Task 3.1: Compatibility Check ---
+Warrior      Dragon        Compatibility    Review
+TestWarrior  Toothless     4.50             Compatible
+TestWarrior  Stormfly      5.00             Compatible
+TestWarrior  Hookfang      4.50             Compatible
+TestWarrior  Meatlug       4.50             Compatible
+TestWarrior  Barf and Belch4.00             Not Compatible
+
+--- Task 3.2: Buddy Matching ---
+Hiccup       Toothless     5.00             Compatible
+Astrid       Stormfly      5.00             Compatible
+Snotlout     Barf and Belch5.00             Compatible
+Fishlegs     Hookfang      5.00             Compatible
+
+--- Testing totalTime Function ---

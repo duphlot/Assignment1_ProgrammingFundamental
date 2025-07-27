@@ -11,8 +11,8 @@
 #include "dragon.h"
 #include <iostream>
 
-void sampleTest(string filename = "input/tnc_tc_12_input.txt", string outputFile = "output/tnc_tc_12_output.txt") {
-    freopen(outputFile.c_str(), "w", stdout);
+void sampleTest(string filename = "tnc_tc_01_input.txt", string outputFile = "tnc_tc_01_output.txt") {
+    freopen(outputFile.c_str(), "w", stdout); 
     const string inputFile = filename;
 
     int result = readFile(inputFile, dragons, dragonDamages, N);
@@ -42,34 +42,30 @@ void testAllFunctions() {
     
     // Test Task 3.2: Buddy Matching with sample warriors
     cout << "\n--- Task 3.2: Buddy Matching ---" << endl;
-    string sampleWarriors[5][3] = {
-        {"Hiccup", "9", "5"},
-        {"Astrid", "8", "4"},
-        {"Snotlout", "6", "3"},
-        {"Fishlegs", "7", "6"},
-        {"Tuffnut", "5", "2"}
+    string sampleWarriors[4][3] = {
+        {"Hiccup", "9", "1"},
+        {"Astrid", "8", "3"},
+        {"Snotlout", "6", "4"},
+        {"Fishlegs", "7", "2"}
     };
     buddyMatching(dragons, sampleWarriors);
     
-    // // Test Task 4: Challenge Time (with sample map)
-    // cout << "\n--- Task 4: Challenge Time ---" << endl;
-    // string sampleMap[10][10];
-    // for (int i = 0; i < 10; i++) {
-    //     for (int j = 0; j < 10; j++) {
-    //         sampleMap[i][j] = "0"; // Default empty terrain
-    //     }
-    // }
-    // // Add some obstacles
-    // sampleMap[2][3] = "1";
-    // sampleMap[4][5] = "2";
-    // sampleMap[6][7] = "1";
-    
-    // computeChallengeTime(sampleWarriors, sampleMap);
-    
-    // // Test Task 5: Fighter Damage
-    // cout << "\n--- Task 5: Team Battle ---" << endl;
-    // int teamsDamage[5];
-    // teamBattle(dragons, sampleWarriors, teamsDamage);
+    // Test Task 4: Challenge Time (with sample map)
+    cout << "\n--- Task 4: Challenge Time ---" << endl;
+    int sampleMap[10][10] = {
+        {0, 1, 2, 3, 4, 0, 1, 2, 3, 4},
+        {1, 2, 3, 4, 0, 1, 2, 3, 4, 0},
+        {2, 3, 4, 0, 1, 2, 3, 4, 0, 1},
+        {3, 4, 0, 1, 2, 3, 4, 0, 1, 2},
+        {4, 0, 1, 2, 3, 4, 0, 1, 2, 3},
+        {0, 1, 2, 3, 4, 0, 1, 2, 3, 4},
+        {1, 2, 3, 4, 0, 1, 2, 3, 4, 0},
+        {2, 3, 4, 0, 1, 2, 3, 4, 0, 1},
+        {3, 4, 0, 1, 2, 3, 4, 0, 1, 2},
+        {4, 0, 1, 2, 3, 4, 0, 1, 2, 3}
+    };
+
+    computeChallengeTime(sampleWarriors, sampleMap);
     
     // Test totalTime function
     cout << "\n--- Testing totalTime Function ---" << endl;

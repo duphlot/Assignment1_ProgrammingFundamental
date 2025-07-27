@@ -2,17 +2,18 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "cppbuild: C/C++: g++.exe build active file",
-            "command": "C:\\Program Files\\CodeBlocks\\MinGW\\bin\\g++.exe",
+            "label": "build active file",
+            "type": "shell",
+            "command": "clang++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
                 "-std=c++17",
-                "${workspaceFolder}\\main.cpp",
-                "${workspaceFolder}\\dragon.cpp",
+                "${workspaceFolder}/main.cpp",
+                "${workspaceFolder}/dragon.cpp",
+                "-I", ".",
                 "-o",
-                "${workspaceFolder}\\main.exe"
+                "${workspaceFolder}/main"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -22,12 +23,12 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Build main.exe from main.cpp and dragon.cpp"
+            "detail": "Build main from main.cpp and dragon.cpp using clang++"
         },
         {
+            "label": "Run main",
             "type": "shell",
-            "label": "Run main.exe",
-            "command": "${workspaceFolder}\\main.exe",
+            "command": "${workspaceFolder}/main",
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -40,7 +41,7 @@
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-            "dependsOn": "cppbuild: C/C++: g++.exe build active file"
+            "dependsOn": "build active file"
         }
     ]
 }

@@ -1,6 +1,3 @@
-Dragon 1: Toothless, Type: 1, Temperament: 3, Ammo: 1, Rider: Hiccup, Damage: 100
-Dragon 2: Stormfly, Type: 2, Temperament: 2, Ammo: 2, Rider: Astrid, Damage: 80
-Dragon 3: Hookfang, Type: 4, Temperament: 4, Ammo: 3, Rider: Snotlout, Damage: 70
 File read successfully.
 Number of dragons: 3
 
@@ -15,14 +12,273 @@ TestWarrior  Stormfly      2.00             Not Compatible
 TestWarrior  Hookfang      3.00             Not Compatible
 
 --- Task 3.2: Buddy Matching ---
-Hiccup       Hookfang      2.50             Not Compatible
-Astrid       Toothless     2.50             Not Compatible
-Snotlout     Stormfly      3.00             Not Compatible
+
+--- Task 4: Challenge Time ---
+Warrior        Total time (secs)
+Hiccup         450
+Astrid         450
+Snotlout       450
+Fishlegs       450
 
 --- Testing totalTime Function ---
 Heritage Location: (3, 3)
 Key Location: (8, 8)
-Total time: 781
+Current position: (0,0)
+Current total time: 0
+Current position: (0,1)
+Current total time: 0
+Current position: (0,2)
+Current total time: 5
+Current position: (0,3)
+Current total time: 10
+Current position: (0,4)
+Current total time: 15
+Current position: (0,5)
+Current total time: 20
+Current position: (0,6)
+Current total time: 25
+Current position: (0,7)
+Current total time: 30
+Current position: (0,8)
+Current total time: 35
+Current position: (0,9)
+Current total time: 40
+Current position: (1,9)
+Current total time: 50
+Current position: (1,8)
+Current total time: 55
+Current position: (1,7)
+Current total time: 65
+Current position: (1,6)
+Current total time: 75
+Current position: (1,5)
+Current total time: 85
+Current position: (1,4)
+Current total time: 95
+Current position: (1,3)
+Current total time: 105
+Current position: (1,2)
+Current total time: 115
+Current position: (1,1)
+Current total time: 125
+Current position: (1,0)
+Current total time: 135
+Current position: (2,0)
+Current total time: 140
+Current position: (2,1)
+Current total time: 145
+Current position: (2,2)
+Current total time: 150
+Current position: (2,3)
+Current total time: 155
+Current position: (2,4)
+Current total time: 160
+Current position: (2,5)
+Current total time: 165
+Current position: (2,6)
+Current total time: 170
+Current position: (2,7)
+Current total time: 175
+Current position: (2,8)
+Current total time: 180
+Current position: (2,9)
+Current total time: 185
+Time Illusion Dragon at (2, 9)
+Current position: (1,8)
+Current total time: 195
+Current position: (1,7)
+Current total time: 197
+Current position: (1,6)
+Current total time: 199
+Current position: (1,5)
+Current total time: 201
+Current position: (1,4)
+Current total time: 203
+Current position: (1,3)
+Current total time: 205
+Current position: (1,2)
+Current total time: 207
+Current position: (1,1)
+Current total time: 209
+Current position: (1,0)
+Current total time: 211
+Current position: (2,0)
+Current total time: 213
+Current position: (2,1)
+Current total time: 215
+Current position: (2,2)
+Current total time: 217
+Current position: (2,3)
+Current total time: 219
+Current position: (2,4)
+Current total time: 221
+Current position: (2,5)
+Current total time: 223
+Current position: (2,6)
+Current total time: 225
+Current position: (2,7)
+Current total time: 227
+Current position: (2,8)
+Current total time: 229
+Current position: (2,9)
+Current total time: 231
+Current position: (3,9)
+Current total time: 233
+Current position: (3,8)
+Current total time: 238
+Current position: (3,7)
+Current total time: 248
+Current position: (3,6)
+Current total time: 258
+Current position: (3,5)
+Current total time: 268
+Current position: (3,4)
+Current total time: 278
+Current position: (3,3)
+Current total time: 288
+Current position: (3,2)
+Current total time: 293
+Current position: (3,1)
+Current total time: 303
+Current position: (3,0)
+Current total time: 313
+Current position: (4,0)
+Current total time: 323
+Current position: (4,1)
+Current total time: 328
+Current position: (4,2)
+Current total time: 333
+Current position: (4,3)
+Current total time: 338
+Current position: (4,4)
+Current total time: 343
+Current position: (4,5)
+Current total time: 348
+Current position: (4,6)
+Current total time: 353
+Current position: (4,7)
+Current total time: 358
+Current position: (4,8)
+Current total time: 363
+Current position: (4,9)
+Current total time: 368
+Current position: (5,9)
+Current total time: 373
+Current position: (5,8)
+Current total time: 378
+Current position: (5,7)
+Current total time: 388
+Current position: (5,6)
+Current total time: 398
+Current position: (5,5)
+Current total time: 408
+Current position: (5,4)
+Current total time: 418
+Current position: (5,3)
+Current total time: 428
+Current position: (5,2)
+Current total time: 438
+Current position: (5,1)
+Current total time: 448
+Current position: (5,0)
+Current total time: 458
+Current position: (6,0)
+Current total time: 468
+Current position: (6,1)
+Current total time: 473
+Current position: (6,2)
+Current total time: 478
+Current position: (6,3)
+Current total time: 483
+Current position: (6,4)
+Current total time: 488
+Current position: (6,5)
+Current total time: 493
+Current position: (6,6)
+Current total time: 498
+Current position: (6,7)
+Current total time: 503
+Current position: (6,8)
+Current total time: 508
+Current position: (6,9)
+Current total time: 513
+Current position: (7,9)
+Current total time: 518
+Current position: (7,8)
+Current total time: 523
+Current position: (7,7)
+Current total time: 528
+Chaos Reversing Dragon at (7, 7)
+Current position: (7,6)
+Current total time: 538
+Current position: (7,5)
+Current total time: 543
+Current position: (7,4)
+Current total time: 548
+Current position: (7,3)
+Current total time: 553
+Current position: (7,2)
+Current total time: 558
+Current position: (7,1)
+Current total time: 563
+Current position: (7,0)
+Current total time: 568
+Current position: (8,0)
+Current total time: 573
+Current position: (8,1)
+Current total time: 583
+Current position: (8,2)
+Current total time: 588
+Current position: (8,3)
+Current total time: 593
+Current position: (8,4)
+Current total time: 598
+Current position: (8,5)
+Current total time: 603
+Current position: (8,6)
+Current total time: 608
+Chaos Reversing Dragon at (8, 6)
+Current position: (6,9)
+Current total time: 618
+Current position: (7,9)
+Current total time: 620
+Current position: (7,8)
+Current total time: 622
+Current position: (7,7)
+Current total time: 624
+Current position: (7,6)
+Current total time: 626
+Current position: (7,5)
+Current total time: 628
+Current position: (7,4)
+Current total time: 630
+Current position: (7,3)
+Current total time: 632
+Current position: (7,2)
+Current total time: 634
+Current position: (7,1)
+Current total time: 636
+Current position: (7,0)
+Current total time: 638
+Current position: (8,0)
+Current total time: 640
+Current position: (8,1)
+Current total time: 642
+Current position: (8,2)
+Current total time: 644
+Current position: (8,3)
+Current total time: 646
+Current position: (8,4)
+Current total time: 648
+Current position: (8,5)
+Current total time: 650
+Current position: (8,6)
+Current total time: 652
+Current position: (8,7)
+Current total time: 654
+Current position: (8,8)
+Current total time: 659
+Total time: 776
 Remaining HP: 14
 Path: 
 (0,0) (0,1) (0,2) (0,3) (0,4) (0,5) (0,6) (0,7) (0,8) (0,9) (1,9) (1,8) (1,7) (1,6) (1,5) (1,4) (1,3) (1,2) (1,1) (1,0) (2,0) (2,1) (2,2) (2,3) (2,4) (2,5) (2,6) (2,7) (2,8) (2,9) (1,8) (1,7) (1,6) (1,5) (1,4) (1,3) (1,2) (1,1) (1,0) (2,0) (2,1) (2,2) (2,3) (2,4) (2,5) (2,6) (2,7) (2,8) (2,9) (3,9) (3,8) (3,7) (3,6) (3,5) (3,4) (3,3) (3,2) (3,1) (3,0) (4,0) (4,1) (4,2) (4,3) (4,4) (4,5) (4,6) (4,7) (4,8) (4,9) (5,9) (5,8) (5,7) (5,6) (5,5) (5,4) (5,3) (5,2) (5,1) (5,0) (6,0) (6,1) (6,2) (6,3) (6,4) (6,5) (6,6) (6,7) (6,8) (6,9) (7,9) (7,8) (7,7) (7,6) (7,5) (7,4) (7,3) (7,2) (7,1) (7,0) (8,0) (8,1) (8,2) (8,3) (8,4) (8,5) (8,6) (6,9) (7,9) (7,8) (7,7) (7,6) (7,5) (7,4) (7,3) (7,2) (7,1) (7,0) (8,0) (8,1) (8,2) (8,3) (8,4) (8,5) (8,6) (8,7) (8,8) (8,9) (7,9) (7,8) (7,7) (7,6) (7,5) (7,4) (7,3) (7,2) (7,1) (7,0) (6,0) (6,1) (6,2) (6,3) (6,4) (6,5) (6,6) (6,7) (6,8) (6,9) (5,9) (5,8) (5,7) (5,6) (5,5) (5,4) (5,3) (5,2) (5,1) (5,0) (4,0) (4,1) (4,2) (4,3) (4,4) (4,5) (4,6) (4,7) (4,8) (4,9) (3,9) (3,8) (3,7) (3,6) (3,5) (3,4) (3,3) 
