@@ -15,6 +15,8 @@
 Dragon dragons[MAX_DRAGONS];
 int dragonDamages[5] = {0, 0, 0, 0, 0};
 int N = 0;
+int path[200][2];
+int pathLen = 0;
 
 int typeNameToType(const string typeName) {
     if (typeName == "Night Fury") return 1;
@@ -231,7 +233,7 @@ string findKthStrongestDragon(Dragon dragons[], int dragonDamages[5], int N, int
 
 // Task 3.1
 float calculateCompatibility(int warriorSkill, Dragon& dragon){
-    return (float)(10 - abs(dragon.dragonTemperament - warriorSkill)) / 2.0f;
+    return (10 - abs(dragon.dragonTemperament - warriorSkill)) / 2;
 }
 
 void compatibilityCheck(Dragon dragons[], string warriorName, int warriorSkill){
@@ -242,11 +244,9 @@ void compatibilityCheck(Dragon dragons[], string warriorName, int warriorSkill){
 }
 
 void printCompatibilityTable(string fighterName, string dragonName, float compatibility){
-     static bool headerPrinted = false;
-    if (!headerPrinted) {
-        cout << "Warrior      Dragon        Compatibility    Review" << "\n";
-        headerPrinted = true;
-    }
+
+    cout << "Warrior      Dragon        Compatibility    Review" << "\n";
+
     string result = (compatibility > 4) ? "Compatible" : "Not Compatible";
 
     cout << left << setw(13) << fighterName << setw(14) << dragonName
@@ -258,17 +258,17 @@ void printCompatibilityTable(string fighterName, string dragonName, float compat
 void buddyMatching(Dragon dragons[], string warriors[][3]){
     bool dragonUsed[MAX_DRAGONS];
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < N; i++) {
         string warriorName = warriors[i][0];
         int warriorSkill = stoi(warriors[i][1]);
         
         int bestDragonIndex = -1;
         float bestCompatibility = 0;
         
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < N; j++) {
             if (!dragonUsed[j]) {
                 float compatibility = calculateCompatibility(warriorSkill, dragons[j]);
-                if (compatibility > bestCompatibility && compatibility > 4) {
+                if (compatibility > bestCompatibility) {
                     bestCompatibility = compatibility;
                     bestDragonIndex = j;
                 }
@@ -304,8 +304,11 @@ int computeTime(int map[10][10], int warriorID){
     int currentX = 0, currentY = 0;
     bool checkStart = false;
 
-    while (currentX != 9 || currentY != 9) {
-        if (checkStart) tempAnswer = timeFromStartToArea(currentX,currentY);
+    while (currentX != 9 || currentY != 0) {
+        if (checkStart) {
+            tempAnswer +=  timeFromAreaToStart(currentX, currentY) +timeFromStartToArea(currentX,currentY);
+            checkStart = false;
+        }
 
         dir = (currentX % 2 == 0) ? 1 : -1;
         if (dir == 1) { 
@@ -317,7 +320,7 @@ int computeTime(int map[10][10], int warriorID){
         }
 
         if (map[currentX][currentY] == warriorID && warriorID != getAreaID(currentX, currentY)) {
-            tempAnswer = timeFromStartToArea(currentX, currentY) + timeFromAreaToStart(currentX, currentY);
+            tempAnswer += timeFromStartToArea(currentX, currentY);
             checkStart = true;
         } else tempAnswer += 5;
     }
@@ -326,156 +329,148 @@ int computeTime(int map[10][10], int warriorID){
 }
 
 void computeChallengeTime(string warriors[][3], int map[10][10]){
+    N = 5;
     cout << left << setw(15) << "Warrior" << "Total time (secs)" << endl;
-    for (int i=0;i<4;i++){
+    pair<int,int> arrayTime[20];
+    for (int i=0;i<N;i++){
         string warriorName = warriors[i][0];
         int warriorID = stoi(warriors[i][2]);
-        int time = computeTime(map, warriorID);
-
-        cout << left << setw(15) << warriorName << time << endl;
+        int time = computeTime(map, warriorID) + 5;
+        arrayTime[i] = {time, i};
     }
+
+    for (int i=0;i<N;i++){
+        for (int j=0;j<N;j++){
+            if (arrayTime[i].first < arrayTime[j].first){
+                swap(arrayTime[i], arrayTime[j]);
+            }
+        }
+    }
+    int temp = min(4, N);
+    for (int i=0;i<temp;i++){
+        cout << left << setw(15) << warriors[arrayTime[i].second][0] << arrayTime[i].first << endl;
+    }
+
 }
 
 // Task 5.1
-int findriderSkill(string name,string warriors[][3]){
-    for (int i = 0; i < N; i++) {
-        if (warriors[i][0] == name) {
-            return stoi(warriors[i][1]);
-        }
-    }
-    return -1; 
-}
-
-void fighterDamage(Dragon dragons[], string warriors[][3], int (&teamsDamage)[]){
+void fighterDamage(Dragon dragons[], string warriors[][3], int teamsDamage[]){
     int temp = 0;
     for (int i = 0; i < N;i++){
-        int ridersSkill = findriderSkill(warriors[i][0], warriors);
-        
-        int damage = (dragons[i].ammoCounts * dragons[i].dragonTemperament) + (ridersSkill * 5);
-        dragonDamages[i] = damage;
-        cout<<dragons[i].riderNames<<"-"<<dragons[i].dragonNames<<": damage = "<<damage<<"\n";
+        int ridersSkill = stoi(warriors[i][1]);
+        int damage = (dragons[i].ammoCounts * dragonDamages[i]) + ridersSkill;
+        teamsDamage[i] = damage;
+        cout<<warriors[i][0]<<"-"<<dragons[i].dragonNames<<": damage = "<<damage<<"\n";
     }
 }
 
 // Task 5.2
-void findHeritageLocation(int  map[10][10], int &heritageX, int &heritageY) {
-    for (int i=0;i<10;i++){
-        pair<int,int> minInRow = {map[i][0],0}, maxInCol = {map[0][i],0};
-        for (int j=1;j<10;j++) minInRow = min(minInRow, {map[i][j],j});
-
-        for (int j=0;j<10;j++) maxInCol = max(maxInCol, {map[j][minInRow.second],j});
-
-        if (minInRow.first == maxInCol.first) {
+void findHeritageLocation(int map[10][10], int &heritageX, int &heritageY) {
+    for (int i = 0; i < 10; ++i) {
+        int minCol = 0;
+        for (int j = 1; j < 10; ++j) {
+            if (map[i][j] < map[i][minCol]) minCol = j;
+        }
+        int maxRow = 0;
+        for (int k = 1; k < 10; ++k) {
+            if (map[k][minCol] > map[maxRow][minCol]) maxRow = k;
+        }
+        if (i == maxRow) {
             heritageX = i;
-            heritageY = minInRow.second;
-            return; 
+            heritageY = minCol;
+            return;
         }
     }
 }
 
 void findKeyLocation(int map[10][10], int &keyX, int &keyY) {
-    int prefixSum[11][11] = {0};
-
-    for (int i = 1; i <= 10; i++) {
-        for (int j = 1; j <= 10; j++) {
+    int prefixSum[11][11] = {};
+    for (int i = 1; i <= 10; ++i)
+        for (int j = 1; j <= 10; ++j)
             prefixSum[i][j] = map[i-1][j-1] + prefixSum[i-1][j] + prefixSum[i][j-1] - prefixSum[i-1][j-1];
-        }
-    }
-
     int maxSum = INT_MIN;
-    for (int i = 0; i <= 7; i++) {
-        for (int j = 0; j <= 7; j++) {
-            int currentSum = prefixSum[i+3][j+3] - prefixSum[i][j+3] - prefixSum[i+3][j] + prefixSum[i][j];
-            if (currentSum > maxSum) {
-                maxSum = currentSum;
-                keyX = i + 1; 
-                keyY = j + 1; 
+    for (int i = 0; i <= 7; ++i) {
+        for (int j = 0; j <= 7; ++j) {
+            int sum = prefixSum[i+3][j+3] - prefixSum[i][j+3] - prefixSum[i+3][j] + prefixSum[i][j];
+            if (sum > maxSum) {
+                maxSum = sum;
+                keyX = i + 1;
+                keyY = j + 1;
             }
         }
     }
 }
 
-bool checkTimeIllusionDragon(int x,int y, int map[10][10]) {
-    if (x != 9 && y != 9 && x != 0 && y != 0)  return 0;
-    for (int i = 0; i < 10; i++) 
-            if (map[0][i] > map[x][y]) return 0;
-
-    for (int i = 0; i < 10; i++) 
-            if (map[9][i] > map[x][y]) return 0;
-
-    for (int i = 0; i < 10; i++) 
-            if (map[i][0] > map[x][y]) return 0;
-
-    for (int i = 0; i < 10; i++) 
-            if (map[i][9] > map[x][y]) return 0;
-    return 1; 
+bool checkTimeIllusionDragon(int x, int y, int map[10][10]) {
+    if (!(x == 0 || x == 9 || y == 0 || y == 9)) return false;
+    int val = map[x][y];
+    for (int i = 0; i < 10; ++i)
+        if (map[0][i] > val || map[9][i] > val || map[i][0] > val || map[i][9] > val)
+            return false;
+    return true;
 }
 
-bool checkChaosReversingDragon(int x,int y, int map[10][10]) {
-    if (x == 0 || y == 0) return 0; 
-    if (x == 9 || y == 9) return 0; 
-
-    int dx[] = {-1, 1, 0, 0};
-    int dy[] = {0, 0, -1, 1};
-
-    for (int i = 0; i < 4; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10) {
-            if (map[nx][ny] > map[x][y]) return 0;
-        }
+bool checkChaosReversingDragon(int x, int y, int map[10][10]) {
+    if (x == 0 || y == 0 || x == 9 || y == 9) return false;
+    static const int dx[] = {-1, 1, 0, 0}, dy[] = {0, 0, -1, 1};
+    for (int d = 0; d < 4; ++d) {
+        int nx = x + dx[d], ny = y + dy[d];
+        if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10 && map[nx][ny] > map[x][y])
+            return false;
     }
-    return 1; 
+    return true;
 }
 
-int computeCost(int &x, int &y, int (*map)[10], int warriorDamage, int &HP, int originalMap[10][10], int reversingDragonX, int reversingDragonY, int keyX, int keyY, int heritageX, int heritageY) {
+int computeCost(int &x, int &y, int map[10][10], int warriorDamage, int &HP, int originalMap[10][10], int reversingDragonX, int reversingDragonY, int keyX, int keyY, int heritageX, int heritageY) {
     if (map[x][y] == 0) return 2;
-
-    if ((x == keyX && y == keyY) || (x == heritageX && y == heritageY)) return 2;
-
     if (checkTimeIllusionDragon(x, y, originalMap)) {
-        if (warriorDamage < map[x][y]){
-            HP-=2;
+        if (warriorDamage < map[x][y]) {
+            HP -= 2;
             map[x][y] = 0;
-            cout<< "Time Illusion Dragon at (" << x << ", " << y << ")\n";
-            if (x!=0) x--;
+            // cout << "Time Illusion Dragon at (" << x << ", " << y << ")\n";
+            if (x != 0) --x;
             else y = 0;
-        } else map[x][y] = 0;
-        return 10;
-    }
-
-    if (x == reversingDragonX && y == reversingDragonY) {
-        if (warriorDamage < map[x][y]){
-            HP-=2;
+            path[++pathLen][0] = x;
+            path[pathLen][1] = y;
+        } else {
             map[x][y] = 0;
-            swap(x,y);
-        } else map[x][y] = 0;
+        }
         return 10;
     }
-
-    if (warriorDamage < map[x][y]){
-        cout<< "Tiny Dragon at (" << x << ", " << y << ")\n";
-        HP--;
-    } 
+    if (x == reversingDragonX && y == reversingDragonY) {
+        if (warriorDamage < map[x][y]) {
+            HP -= 2;
+            map[x][y] = 0;
+            swap(x, y);
+            path[++pathLen][0] = x;
+            path[pathLen][1] = y;
+        } else {
+            map[x][y] = 0;
+        }
+        return 10;
+    }
+    if (warriorDamage < map[x][y]) {
+        --HP;
+    }
     map[x][y] = 0;
+    if ((x == keyX && y == keyY) || (x == heritageX && y == heritageY)) return 2;
     return 5;
 }
 
 void findReversingDragonLocation(int map[10][10], int &x, int &y) {
-    int currentX = x, currentY = y;
-    int dir = 1;
-    while (currentX != 9 || currentY != 9) {
-        dir = (currentX % 2 == 0) ? 1 : -1;
-        if (dir == 1) { 
-            if (currentY < 9) currentY++;
-            else currentX++;
-        } else { 
-            if (currentY > 0) currentY--;
-            else currentX++;
+    int curX = x, curY = y;
+    while (curX != 9 || curY != 9) {
+        int dir = (curX % 2 == 0) ? 1 : -1;
+        if (dir == 1) {
+            if (curY < 9) ++curY;
+            else ++curX;
+        } else {
+            if (curY > 0) --curY;
+            else ++curX;
         }
-        if (checkChaosReversingDragon(currentX, currentY, map)) {
-            x = currentX;
-            y = currentY;
+        if (checkChaosReversingDragon(curX, curY, map)) {
+            x = curX;
+            y = curY;
         }
     }
 }
@@ -486,120 +481,59 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     memcpy(originalMap, map, sizeof(originalMap));
     findHeritageLocation(map, heritageX, heritageY);
     findKeyLocation(map, keyX, keyY);
-
     int reversingDragonX = 0, reversingDragonY = 0;
     findReversingDragonLocation(map, reversingDragonX, reversingDragonY);
-    // cout<< "Heritage Location: (" << heritageX << ", " << heritageY << ")\n";
-    // cout<< "Key Location: (" << keyX << ", " << keyY << ")\n";
-
-    int startX = 0, startY = 0, totalTime =  computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
-    // cout<<"Current position: ("<<startX<<","<<startY<<")\n";
-    // cout<<"Current total time: "<<totalTime<<"\n";
-
-    int path[200][2];
+    pathLen = 0;
+    int startX = 0, startY = 0;
+    int total = computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
     path[0][0] = startX;
     path[0][1] = startY;
-    int temp = 0;
-    int dir = 1; 
+
     while (startX != keyX || startY != keyY) {
-        dir = (startX % 2 == 0) ? 1 : -1;
-        if (dir == 1) { 
-            if (startY < 9) startY++;
-            else startX++;
-        } else { 
-            if (startY > 0) startY--;
-            else startX++;
+        int dir = (startX % 2 == 0) ? 1 : -1;
+        bool goingForward = (dir == 1)
+            ? (startX < keyX || (startX == keyX && startY < keyY))
+            : (startX < keyX || (startX == keyX && startY > keyY));
+        if (goingForward) {
+            if ((dir == 1 && startY < 9) || (dir == -1 && startY > 0)) startY += dir;
+            else ++startX;
+        } else {
+            if ((dir == -1 && startY < 9) || (dir == 1 && startY > 0)) startY -= dir;
+            else --startX;
+            
         }
-        path[++temp][0] = startX;
-        path[temp][1] = startY;
-        cout<<"Current position: ("<<startX<<","<<startY<<")\n";
-        totalTime += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
-        cout<<"Current total time: "<<totalTime<<"\n";
+        path[++pathLen][0] = startX;
+        path[pathLen][1] = startY;
+        total += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
         if (startX == keyX && startY == keyY) break;
     }
 
-    if (heritageX < keyX) {
-        // total step via zigzag
-        // step 1
-        dir = (heritageX % 2 == 0) ? 1 : -1;
-        int step1 = dir == 1 ? 9 - heritageY + 1 : heritageY + 1;
-        cout<<"Step 1: "<<step1<<"\n";
-        // step 2
-        dir = (keyX % 2 == 0) ? 1 : -1;
-        int step2 = dir == 1 ? keyY: 9 - keyY + 1;
-        cout<<"Step 2: "<<step2<<"\n";
-        // totalStep
-        int totalStep = step1 + step2 + (keyX - heritageX - 1) * 10;
-        cout<<"Total step: "<<totalStep<<"\n";
-        totalTime += totalStep * 2;
-
-        int curX = keyX, curY = keyY;
-        int dir2 = (keyX % 2 == 0) ? 1 : -1;
-        while (curX != heritageX || curY != heritageY) {
-            if (dir2 == 1) {
-                if (curY < 9) curY++;
-                else {
-                    curX--;
-                    dir2 = -1;
-                }
-            } else {
-                if (curY > 0) curY--;
-                else {
-                    curX--;
-                    dir2 = 1;
-                }
-            }
-            path[++temp][0] = curX;
-            path[temp][1] = curY;
-            if (curX == heritageX && curY == heritageY) break;
+    while (startX != heritageX || startY != heritageY) {
+        int dir = (startX % 2 == 0) ? 1 : -1;
+        bool goingForward = (dir == 1)
+            ? (startX < heritageX || (startX == heritageX && startY < heritageY))
+            : (startX < heritageX || (startX == heritageX && startY > heritageY));
+        if (goingForward) {
+            if ((dir == 1 && startY < 9) || (dir == -1 && startY > 0)) startY += dir;
+            else ++startX;
+        } else {
+            if ((dir == -1 && startY < 9) || (dir == 1 && startY > 0)) startY -= dir;
+            else --startX;
+            
         }
-
-    }
-    else if (heritageX == keyX && heritageY < keyY) {
-        totalTime += (keyY - heritageY) * 2;
-        int curX = keyX, curY = keyY;
-        int dir2 = (keyX % 2 == 0) ? 1 : -1; 
-        while (curX != heritageX || curY != heritageY) {
-            if (dir2 == 1) {
-                if (curY < 9) curY++;
-                else {
-                    curX--;
-                    dir2 = -1;
-                }
-            } else {
-                if (curY > 0) curY--;
-                else {
-                    curX--;
-                    dir2 = 1;
-                }
-            }
-            path[++temp][0] = curX;
-            path[temp][1] = curY;
-            if (curX == heritageX && curY == heritageY) break;
-        }
-    } else {
-        while (startX != heritageX || startY != heritageY) {
-            dir = (startX % 2 == 0) ? 1 : -1;
-            if (dir == 1) { 
-                if (startY < 9) startY++;
-                else startX++;
-            } else { 
-                if (startY > 0) startY--;
-                else startX++;
-            }
-            path[++temp][0] = startX;
-            path[temp][1] = startY;
-            totalTime += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
-        }
+        path[++pathLen][0] = startX;
+        path[pathLen][1] = startY;
+        total += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
+        if (startX == heritageX && startY == heritageY) break;
     }
 
-    cout<<"Total time: "<<totalTime<<"\n";
-    cout<<"Remaining HP: "<<HP<<"\n";
-    cout<<"Path: \n";
-    for (int i = 0; i <= temp; i++) {
-        cout<<"("<<path[i][0]<<","<<path[i][1]<<") ";
+    cout << "Total time: " << total << " (sec)" << "\n";
+    cout << "Remaining HP: " << HP << "\n";
+    cout << "Path: ";
+    for (int i = 0; i <= pathLen; ++i) {
+        cout << "(" << path[i][0] << "," << path[i][1] << ") ";
     }
-    cout<<"\n";
+    cout << "\n";
 }
 
 ////////////////////////////////////////////////

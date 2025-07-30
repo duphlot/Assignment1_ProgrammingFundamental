@@ -19,6 +19,8 @@ struct Dragon {
 extern Dragon dragons[MAX_DRAGONS];
 extern int dragonDamages[5];
 extern int N;
+extern int path[200][2];
+extern int pathLen;
 
 ////////////////////////////////////////////////////////////////////////
 /// STUDENT'S ANSWER BEGINS HERE
