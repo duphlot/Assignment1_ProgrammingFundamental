@@ -29,7 +29,6 @@ int typeNameToType(const string typeName) {
     if (typeName == "3") return 3;
     if (typeName == "4") return 4;
     if (typeName == "5") return 5;
-
     return 0;
 }
 
@@ -47,23 +46,31 @@ int countBlankSpaces(string name) {
     return count;
 }
 
+bool checkMissLine(ifstream &ifs, string &line) {
+    if (!getline(ifs, line)){
+        ifs.close();
+        return true;
+    } 
+    return false;
+}
+
 // Task 1
-int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], int &N)
-{
+int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], int &N){
     if (filename.substr(filename.find_last_of(".") + 1) != "txt") return 2; 
 
-
     ifstream ifs(filename);
+    int dragonCount = 0;
+    string line;
+    string typeNames[MAX_DRAGONS];
+    int typeCount = 0;
+    int tempCount = 0;
+    int ammoCount = 0;
+    int damageCount = 0;
+    int riderCount = 0;
     if (!ifs.is_open()) return 3;
 
-    string line;
+    checkMissLine(ifs, line);
     
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4;
-    }
-    
-    int dragonCount = 0;
     size_t start = line.find('"');
     while (start != string::npos && dragonCount < MAX_DRAGONS) {
         size_t end = line.find('"', start + 1);
@@ -75,14 +82,8 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
             break;
         }
     }
+    if (checkMissLine(ifs, line)) return 4;
 
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4;
-    }
-
-    string typeNames[MAX_DRAGONS];
-    int typeCount = 0;
     start = line.find('"');
     while (start != string::npos && typeCount < MAX_DRAGONS) {
         size_t end = line.find('"', start + 1);
@@ -96,12 +97,8 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
 
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4; 
-    }
-    
-    int tempCount = 0;
+    if (checkMissLine(ifs, line)) return 4;
+
     start = line.find('[');
     size_t end = line.find(']');
     if (start != string::npos && end != string::npos) {
@@ -116,12 +113,8 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
     
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4; 
-    }
+    if (checkMissLine(ifs, line)) return 4;
     
-    int ammoCount = 0;
     start = line.find('[');
     end = line.find(']');
     if (start != string::npos && end != string::npos) {
@@ -135,12 +128,9 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
             ammoCount++;
         }
     }
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4;
-    }
-    
-    int damageCount = 0;
+
+    if (checkMissLine(ifs, line)) return 4;
+
     start = line.find('[');
     end = line.find(']');
     if (start != string::npos && end != string::npos) {
@@ -153,12 +143,8 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
     
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4;
-    }
-    
-    int riderCount = 0;
+    if (checkMissLine(ifs, line)) return 4;
+
     start = line.find('"');
     while (start != string::npos && riderCount < MAX_DRAGONS) {
         size_t nameEnd = line.find('"', start + 1);
@@ -173,10 +159,7 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
         }
     }
 
-    if (!getline(ifs, line)) {
-        ifs.close();
-        return 4; 
-    }
+    if (checkMissLine(ifs, line)) return 4;
 
     N = stoi(line);
     ifs.close();
@@ -233,10 +216,12 @@ string findKthStrongestDragon(Dragon dragons[], int dragonDamages[5], int N, int
 
 // Task 3.1
 float calculateCompatibility(int warriorSkill, Dragon& dragon){
-    return (10 - abs(dragon.dragonTemperament - warriorSkill)) / 2;
+    return (10 - abs(dragon.dragonTemperament - warriorSkill)) / 2.0;
 }
 
 void compatibilityCheck(Dragon dragons[], string warriorName, int warriorSkill){
+    cout << "Warrior      Dragon        Compatibility    Review" << endl;
+
     for (int i = 0; i < N; i++) {
         float compatibility = calculateCompatibility(warriorSkill, dragons[i]);
         printCompatibilityTable(warriorName, dragons[i].dragonNames, compatibility);
@@ -244,9 +229,6 @@ void compatibilityCheck(Dragon dragons[], string warriorName, int warriorSkill){
 }
 
 void printCompatibilityTable(string fighterName, string dragonName, float compatibility){
-
-    cout << "Warrior      Dragon        Compatibility    Review" << "\n";
-
     string result = (compatibility > 4) ? "Compatible" : "Not Compatible";
 
     cout << left << setw(13) << fighterName << setw(14) << dragonName
@@ -256,6 +238,7 @@ void printCompatibilityTable(string fighterName, string dragonName, float compat
 
 // Task 3.2
 void buddyMatching(Dragon dragons[], string warriors[][3]){
+    cout << "Warrior      Dragon        Compatibility    Review" << endl;
     bool dragonUsed[MAX_DRAGONS];
 
     for (int i = 0; i < N; i++) {
@@ -268,7 +251,7 @@ void buddyMatching(Dragon dragons[], string warriors[][3]){
         for (int j = 0; j < N; j++) {
             if (!dragonUsed[j]) {
                 float compatibility = calculateCompatibility(warriorSkill, dragons[j]);
-                if (compatibility > bestCompatibility) {
+                if (compatibility > bestCompatibility && compatibility > 4) {
                     bestCompatibility = compatibility;
                     bestDragonIndex = j;
                 }
@@ -306,7 +289,7 @@ int computeTime(int map[10][10], int warriorID){
 
     while (currentX != 9 || currentY != 0) {
         if (checkStart) {
-            tempAnswer +=  timeFromAreaToStart(currentX, currentY) +timeFromStartToArea(currentX,currentY);
+            tempAnswer +=  timeFromAreaToStart(currentX,currentY);
             checkStart = false;
         }
 
@@ -320,7 +303,7 @@ int computeTime(int map[10][10], int warriorID){
         }
 
         if (map[currentX][currentY] == warriorID && warriorID != getAreaID(currentX, currentY)) {
-            tempAnswer += timeFromStartToArea(currentX, currentY);
+            tempAnswer += timeFromAreaToStart(currentX, currentY) + 5;
             checkStart = true;
         } else tempAnswer += 5;
     }
@@ -358,7 +341,7 @@ void fighterDamage(Dragon dragons[], string warriors[][3], int teamsDamage[]){
     int temp = 0;
     for (int i = 0; i < N;i++){
         int ridersSkill = stoi(warriors[i][1]);
-        int damage = (dragons[i].ammoCounts * dragonDamages[i]) + ridersSkill;
+        int damage = (dragons[i].ammoCounts * dragonDamages[dragons[i].dragonTypes-1]) + (ridersSkill * 5);
         teamsDamage[i] = damage;
         cout<<warriors[i][0]<<"-"<<dragons[i].dragonNames<<": damage = "<<damage<<"\n";
     }
@@ -531,7 +514,7 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     cout << "Remaining HP: " << HP << "\n";
     cout << "Path: ";
     for (int i = 0; i <= pathLen; ++i) {
-        cout << "(" << path[i][0] << "," << path[i][1] << ") ";
+        cout << "(" << path[i][0] << "," << path[i][1] << ")";
     }
     cout << "\n";
 }

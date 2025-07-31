@@ -82,11 +82,12 @@ void testAllFunctions() {
         { 13,  23,  33,  43,  53,  63,  73, 153,  93, 170 }
     };
     
-    // Test với chiến binh có sát thương = 150 và HP = 20 như ví dụ
     totalTime(testMap, 150, 20);
 }
 int main() {
-    string fighters_16[5][3] = {
+    cout << readFile("input/tnc_tc_12_input.txt", dragons, dragonDamages, N) << endl;
+
+    string fighters_18[5][3] = {
         {"Valka", "8", "1"},
         {"Eret", "5", "2"},
         {"Stoick", "10", "3"},
@@ -94,19 +95,7 @@ int main() {
         {"Spitelout", "6", "4"},
     };
 
-    int map_20[10][10] = {
-{ 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 },
-{ 65, 65, 55, 65, 75, 100, 100, 100, 95, 105 },
-{ 12, 22, 32, 42, 52, 198, 200, 198, 92, 175 },
-{ 14, 24, 34, 44, 54, 64, 74, 84, 94, 104 },
-{ 118, 28, 40, 50, 58, 59, 78, 90, 98, 108 },
-{ 19, 29, 39, 49, 59, 69, 79, 89, 99, 109 },
-{ 11, 21, 31, 5, 51, 61, 71, 81, 91, 101 },
-{ 16, 26, 36, 46, 56, 66, 76, 86, 96, 106 },
-{ 17, 27, 37, 47, 57, 67, 77, 87, 90, 107 },
-{ 13, 23, 33, 43, 53, 63, 73, 83, 93, 103 }
-};
-      int playerDamage_20 = 150;
-  totalTime(map_20, playerDamage_20, 20);
+    int teamDamage_18[5];
+    fighterDamage(dragons, fighters_18, teamDamage_18);
     return 0;
 }
