@@ -85,17 +85,18 @@ void testAllFunctions() {
     totalTime(testMap, 150, 20);
 }
 int main() {
-    cout << readFile("input/tnc_tc_12_input.txt", dragons, dragonDamages, N) << endl;
-
-    string fighters_18[5][3] = {
-        {"Valka", "8", "1"},
-        {"Eret", "5", "2"},
-        {"Stoick", "10", "3"},
-        {"Grimmel", "7", "0"},
-        {"Spitelout", "6", "4"},
-    };
-
-    int teamDamage_18[5];
-    fighterDamage(dragons, fighters_18, teamDamage_18);
+    int map[10][10] = {
+    {10,  4, 30, 40, 50, 60, 70, 80, 90, 100},
+    {35, 31, 35, 35, 45, 55, 65, 75, 85, 130},     
+    {25, 20, 45, 55, 100, 65, 75, 75, 160, 170}, 
+    {11, 30, 31, 41, 51, 61, 71, 81, 91, 101},
+    {10, 28, 29, 39, 49, 59, 69, 79, 89, 99},
+    {5,  27, 15, 20, 25, 30, 35, 40, 45, 50},
+    {2,  26, 6,  8,  10, 12, 14, 16, 18, 20},
+    {1,  25, 5,  7,  9,  11, 13, 15, 17, 19},
+    {0,  24, 0,  0,  0,  0,  0,  0,  0,  0},
+    {1,  23, 3,  4,  5,  6,  7,  8,  9, 10}
+};
+totalTime(map, 99, 30);
     return 0;
 }

@@ -398,42 +398,51 @@ bool checkChaosReversingDragon(int x, int y, int map[10][10]) {
     static const int dx[] = {-1, 1, 0, 0}, dy[] = {0, 0, -1, 1};
     for (int d = 0; d < 4; ++d) {
         int nx = x + dx[d], ny = y + dy[d];
-        if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10 && map[nx][ny] > map[x][y])
+        if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10 && map[nx][ny] >= map[x][y])
             return false;
     }
     return true;
 }
 
+
 int computeCost(int &x, int &y, int map[10][10], int warriorDamage, int &HP, int originalMap[10][10], int reversingDragonX, int reversingDragonY, int keyX, int keyY, int heritageX, int heritageY) {
     if (map[x][y] == 0) return 2;
+    int total = 0;
     if (checkTimeIllusionDragon(x, y, originalMap)) {
         if (warriorDamage < map[x][y]) {
             HP -= 2;
+            // cout<<x<<" "<<y<<" "<<HP<<"\n";
             map[x][y] = 0;
-            // cout << "Time Illusion Dragon at (" << x << ", " << y << ")\n";
             if (x != 0) --x;
             else y = 0;
             path[++pathLen][0] = x;
             path[pathLen][1] = y;
+            bool secondCheck = false;
+            int cal = computeCost(x, y, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
+            total = 10 + (cal == 2 ? 0 : cal);
         } else {
             map[x][y] = 0;
         }
-        return 10;
+        return total;
     }
     if (x == reversingDragonX && y == reversingDragonY) {
         if (warriorDamage < map[x][y]) {
             HP -= 2;
+            // cout<<x<<" "<<y<<" "<<HP<<"\n";
             map[x][y] = 0;
             swap(x, y);
             path[++pathLen][0] = x;
             path[pathLen][1] = y;
+            int cal = computeCost(x, y, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
+            total = 10 + (cal == 2 ? 0 : cal);
         } else {
             map[x][y] = 0;
         }
-        return 10;
+        return total;
     }
     if (warriorDamage < map[x][y]) {
         --HP;
+        // cout<<x<<" "<<y<<" "<<HP<<"\n";
     }
     map[x][y] = 0;
     if ((x == keyX && y == keyY) || (x == heritageX && y == heritageY)) return 2;
@@ -466,8 +475,12 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     findKeyLocation(map, keyX, keyY);
     int reversingDragonX = 0, reversingDragonY = 0;
     findReversingDragonLocation(map, reversingDragonX, reversingDragonY);
+    // cout<< "Heritage Location: (" << heritageX << ", " << heritageY << ")\n";
+    // cout<< "Key Location: (" << keyX << ", " << keyY << ")\n";
+    // cout<< "Reversing Dragon Location: (" << reversingDragonX << ", " << reversingDragonY << ")\n";
     pathLen = 0;
     int startX = 0, startY = 0;
+
     int total = computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
     path[0][0] = startX;
     path[0][1] = startY;
@@ -488,6 +501,17 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
         path[++pathLen][0] = startX;
         path[pathLen][1] = startY;
         total += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
+        if (HP <= 0) {
+            cout << "Warrior defeated! Challenge failed!";
+            cout << "Total time: " << total << " (sec)" << "\n";
+            cout << "Remaining HP: " << 0 << "\n";
+            cout << "Path: ";
+            for (int i = 0; i <= pathLen; ++i) {
+                cout << "(" << path[i][0] << "," << path[i][1] << ")";
+            }
+            cout << "\n";
+            return;
+        }
         if (startX == keyX && startY == keyY) break;
     }
 
@@ -507,6 +531,17 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
         path[++pathLen][0] = startX;
         path[pathLen][1] = startY;
         total += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
+        if (HP <= 0) {
+            cout << "Warrior defeated! Challenge failed!";
+            cout << "Total time: " << total << " (sec)" << "\n";
+            cout << "Remaining HP: " << 0 << "\n";
+            cout << "Path: ";
+            for (int i = 0; i <= pathLen; ++i) {
+                cout << "(" << path[i][0] << "," << path[i][1] << ")";
+            }
+            cout << "\n";
+            return;
+        }
         if (startX == heritageX && startY == heritageY) break;
     }
 
