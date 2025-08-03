@@ -66,7 +66,7 @@ void parseQuotedStrings(const string& line, string results[], int& count, int ma
     }
 }
 
-void parseArrayValues(const string& line, int results[], int& count, int maxCount) {
+void parseArrayValues(const string& line, int results[], int& count, int maxCount, int minValue, int maxValue) {
     size_t start = line.find('[');
     size_t end = line.find(']');
     if (start != string::npos && end != string::npos) {
@@ -75,6 +75,8 @@ void parseArrayValues(const string& line, int results[], int& count, int maxCoun
         string token;
         while (getline(valStream, token, ';') && count < maxCount) {
             results[count] = stoi(token);
+            results[count] = max(minValue, results[count]);
+            results[count] = min(results[count],maxValue);
             count++;
         }
     }
@@ -140,7 +142,7 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
     // Read temperaments
     if (checkMissLine(ifs, line)) return 4;
     int tempValues[MAX_DRAGONS];
-    parseArrayValues(line, tempValues, tempCount, MAX_DRAGONS);
+    parseArrayValues(line, tempValues, tempCount, MAX_DRAGONS, 0, 10);
     for (int i = 0; i < tempCount && i < dragonCount; i++) {
         dragons[i].dragonTemperament = tempValues[i];
     }
@@ -148,15 +150,15 @@ int readFile(const string filename, Dragon dragons[], int (&dragonDamages)[5], i
     // Read ammo counts
     if (checkMissLine(ifs, line)) return 4;
     int ammoValues[MAX_DRAGONS];
-    parseArrayValues(line, ammoValues, ammoCount, MAX_DRAGONS);
+    parseArrayValues(line, ammoValues, ammoCount, MAX_DRAGONS, 0, 1000);
     for (int i = 0; i < ammoCount && i < dragonCount; i++) {
         dragons[i].ammoCounts = ammoValues[i];
     }
 
     // Read dragon damages
     if (checkMissLine(ifs, line)) return 4;
-    parseArrayValues(line, dragonDamages, damageCount, 5);
-    
+    parseArrayValues(line, dragonDamages, damageCount, 5, 0, 1000);
+
     // Read rider names
     if (checkMissLine(ifs, line)) return 4;
     string riderNames[MAX_DRAGONS];
@@ -414,12 +416,14 @@ int computeCost(int &x, int &y, int map[10][10], int warriorDamage, int &HP, int
         }
         return total;
     }
-    
+    if ((x == keyX && y == keyY) || (x == heritageX && y == heritageY)) {
+        map[x][y] = 0;
+        return 2;
+    }
     if (warriorDamage < map[x][y]) {
         --HP;
     }
     map[x][y] = 0;
-    if ((x == keyX && y == keyY) || (x == heritageX && y == heritageY)) return 2;
     return 5;
 }
 
@@ -482,7 +486,7 @@ bool moveToTarget(int &startX, int &startY, int targetX, int targetY, int &total
         path[++pathLen][0] = startX;
         path[pathLen][1] = startY;
         total += computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
-        
+        cout << "Current position: (" << startX << "," << startY << ") Total time: " << total << " (sec)" << "\n";
         if (HP <= 0) {
             printDefeatMessage(total, pathLen);
             return false;
@@ -505,6 +509,8 @@ void totalTime(int map[10][10], int warriorDamage, int HP) {
     int startX = 0, startY = 0;
 
     int total = computeCost(startX, startY, map, warriorDamage, HP, originalMap, reversingDragonX, reversingDragonY, keyX, keyY, heritageX, heritageY);
+    cout << "Current position: (" << startX << "," << startY << ") Total time: " << total << " (sec)" << "\n";
+
     path[0][0] = startX;
     path[0][1] = startY;
 
